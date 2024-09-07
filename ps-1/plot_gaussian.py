@@ -11,7 +11,7 @@ def gaussian(x, mu, sigma):
 
 plt.xlabel("Values over the range [-10, 10]")
 plt.ylabel("Normalized Gaussian value")
-plt.title("Gussian Curve")
+plt.title("Gaussian Curve")
 plt.plot(x_range, gaussian(x_range, mean, std))
 plt.savefig('gaussian.png')
 plt.show()
