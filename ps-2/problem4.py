@@ -1,29 +1,37 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-N = 1000
-x = np.linspace(-2, 2, N)
-y = x
-x, y = np.meshgrid(x, y)
-Z = np.zeros([N, N], dtype=complex)  # Initialize Z with complex dtype
-c = x + 1j * y
+# Parameters
+N = 1000  # Grid size
+max_iter = 100  # Maximum number of iterations
 
+# Create a grid of complex numbers
+x = np.linspace(-2.0, 2.0, N)
+y = np.linspace(-2.0, 2.0, N)
+X, Y = np.meshgrid(x, y)
+C = X + 1j * Y
+Z = np.zeros(C.shape, dtype=complex)
+
+# Initialize the escape time array
+escape_time = np.zeros(C.shape, dtype=int)
+
+# Iterate over each point
 for i in range(N):
     for j in range(N):
         z = 0
-        nn = 100
-        while nn > 0:
-            if abs(z) > 2.0:
-                break
-            z = z**2 + c[i][j]
-            nn -= 1
-        Z[i][j] = z
+        c = C[i, j]
+        iteration = 0
+        while abs(z) <= 2 and iteration < max_iter:
+            z = z**2 + c
+            iteration += 1
+        escape_time[i, j] = iteration
 
-plt.figure(figsize=(9, 9))
-plt.title("Mandelbrot Set")
-plt.imshow(np.abs(Z), origin="lower")  # Display the magnitude of Z
-plt.colorbar()
-plt.xlabel('Real')
-plt.ylabel('Imaginary')
+# Plotting
+plt.figure(figsize=(10, 10))
+plt.imshow(escape_time, extent=(-2, 2, -2, 2), cmap='inferno', origin='lower')
+plt.colorbar(label='Number of iterations')
+plt.title('Mandelbrot Set')
+plt.xlabel('Real part')
+plt.ylabel('Imaginary part')
 plt.savefig('mandelbrot.png')
 plt.show()
